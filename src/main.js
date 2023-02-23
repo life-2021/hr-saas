@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-
+import 'default-passive-events'
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 // ElementUI
