@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-//reset.css
-import "reset.css/reset.cssreset.css";
+// import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 // ElementUI
 import ElementUI from "element-ui";
@@ -13,6 +12,9 @@ Vue.use(ElementUI);
 import Vuex from "vuex";
 Vue.use(Vuex);
 
+import component from "./components";
+Vue.use(component);
+
 // 导入路由
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
@@ -21,8 +23,11 @@ Vue.use(VueRouter);
 import axios from "axios";
 Vue.prototype.$axios = axios;
 
-
+import router from '@/router'
 import store from '@/store';
+
+import '@/icons' // icon
+import '@/permission' // permission control
 
 Vue.config.productionTip = false
 
