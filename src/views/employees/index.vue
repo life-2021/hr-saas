@@ -51,15 +51,15 @@
         // created(){
         //     this.getEmployeeList()
         // },
-        // methods:{
-        //     async getEmployeeList() {
-        //         this.loading = true
-        //         const {total, rows} = await getEmployeeList(this.page)
-        //         this.page.total = total
-        //         this.list = rows
-        //         this.loading = false
-        //     }
-        // }
+        methods:{
+            async getEmployeeList() {
+                this.loading = true
+                const {total, rows} = await getEmployeeList(this.page)
+                this.page.total = total
+                this.list = rows
+                this.loading = false
+            }
+        }
     }
 </script>
 
