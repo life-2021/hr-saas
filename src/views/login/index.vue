@@ -121,7 +121,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['user/login']),//引入方法
+    ...mapActions(['user/login']),//引入user空间内的login方法
     showPwd() {
       if (this.passwordType === "password") {
         this.passwordType = "";
@@ -138,7 +138,7 @@ export default {
           try {
             this.loading = true;
             // console.log(this.loginForm)
-            await this['user/login'](this.loginForm)
+            await this['user/login'](this.loginForm) //调用user空间的login方法
             this.$router.push('/')
           } catch (error) {
             console.error(error)
