@@ -17,12 +17,12 @@ export function getUserProfileAPI(data) {
   });
 }
 
-// 获取用户头像
-export function getUserPhotoAPI(id) {
-  return request({
-    url: `/sys/user/${id}`,
-  });
-}
+// 获取用户公司信息
+// export function getUserPhotoAPI(id) {
+//   return request({
+//     url: `/sys/user/${id}`,
+//   });
+// }
 
 export function logout() {}
 
