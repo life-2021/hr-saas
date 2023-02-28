@@ -4,7 +4,12 @@ import { login, getUserProfileAPI } from "../../api/user.js";
 // 数据
 const state = {
   token: getToken(), //设置token为共享状态  初始化的vuex时候先从缓存读取
-  userInfo: { userName: "guanliyuan" }, //用户信息
+  userInfo: {
+    // 用户信息
+    username: "", //用户名
+    userId: "", //用户ID
+    company: "", //公司名
+  },
 };
 
 // 同步
@@ -20,8 +25,12 @@ const mutations = {
     removeToken();
   },
   // 存储用户信息
-  setUser(state, value) {
-    state.userInfo = value;
+  setUser(state, data) {
+    // console.log(data);
+    state.userInfo.username = data.username;
+    state.userInfo.userId = data.userId;
+    state.userInfo.company = data.company;
+
   },
 };
 
@@ -39,8 +48,8 @@ const actions = {
     const result = await getUserProfileAPI({
       "Content-Type": "application/x-www-form-urlencoded",
     });
-    console.log(result);
-    // context.commit("setUser", result); //设置token
+    // console.log(result.data.data);
+    context.commit("setUser", result.data.data); //设置userInfo
   },
 };
 
