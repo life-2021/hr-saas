@@ -1,172 +1,100 @@
 <template>
- <div>
-    <!-- 组织架构 -->
-    <el-menu
-      class="el-menu-demo"
-      mode="horizontal"
-    >
-      <el-menu-item index="1">
-        <strong>江苏传智播客教育科技股份有限公司</strong>
-        <span class="person">负责人</span>
-        <span
-          ><el-select
-            v-model="value"
-            size="mini"
-            placeholder="操作"
-            class="ctrl"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option> </el-select
-        ></span>
-      </el-menu-item>
-    </el-menu>
-
-    <div class="custom-tree-container">
-      <div class="block">
-        <el-tree
-          :data="data"
-          node-key="id"
-          default-expand-all
-          :expand-on-click-node="false"
-        >
-          <span class="custom-tree-node" slot-scope="{ node, data }">
-            <span>{{ node.label }}</span>
-            <span>
-              <el-button type="text" size="mini">
-                孙财
-              </el-button>
-              <el-button
-                type="text"
-                size="mini"
-                @click="() => remove(node, data)"
-              >
-                <el-dropdown>
-                  <span class="el-dropdown-link">
-                    操作<i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click="addFn">添加子部门</el-dropdown-item>
-                    <el-dropdown-item>查看部门</el-dropdown-item>
-                    <el-dropdown-item>删除部门</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </el-button>
-            </span>
-          </span>
+  <div v-loading="loading"
+    class="dashboard-container"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
+    <div class="app-container">
+      <!-- 组织架构内容-头部 -->
+      <el-card class="tree-card">
+        <TreeTools :treeNode="company" :isRoot="true" @addDepts="addDepts" />
+        <!-- 树形控件 -->
+        <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
+            <TreeTools
+              slot-scope="{data}"
+              :treeNode="data"             
+              @delDepts="getDepartments"
+              @addDepts="addDepts"
+              @editDepts="editDepts"
+            />
         </el-tree>
-      </div>
+      </el-card>
     </div>
+    <!-- 添加部门弹窗层 -->
+        <AddDept
+          ref="addDept"
+          :show-dialog.sync="showDialog"
+          :treeNode="node"
+          @addDepts="getDepartments"
+        />
   </div>
 </template>
 
 <script>
+import TreeTools from "../departments/components/TreeTools.vue";
+import AddDept from "../departments/components/AddDept.vue";
+import { getDepartments } from "../../api/departments";
+import { tranListToTreeData } from "../../utils/departments";
 export default {
+  components: { TreeTools, AddDept },
   data() {
     return {
-        value:'',
-      options: [
-        {
-          value: "选项1",
-          label: "添加子部门",
+      departs: [ {
+          name: "总裁办",
+          manager: "曹操",
+          children: [{ name: "董事会", manager: "曹丕" }],
         },
-      ],
-      data: [
-        {
-          label: "总裁办",
-        },
-        {
-          label: "行政部",
-        },
-        {
-          label: "人事部",
-        },
-        {
-          label: "财务部",
-          children: [
-            {
-              label: "财务核算部",
-            },
-            {
-              label: "税务管理部",
-            },
-            {
-              label: "薪资管理部",
-            },
-          ],
-        },
-        {
-          label: "技术部",
-          children: [
-            {
-              label: "Java研发部",
-            },
-            {
-              label: "Python研发部",
-            },
-            {
-              label: "Php研发部",
-            },
-          ],
-        },
-        {
-          label: "运营部",
-        },
-        {
-          label: "市场部",
-          children: [
-            {
-              label: "北京事业部",
-            },
-            {
-              label: "上海事业部",
-            },
-          ],
-        },
-      ],
+        { name: "行政部", manager: "刘备" },
+        { name: "人事部", manager: "孙权" },], // 存储组织架构的部门数据
+      company: { name: "江苏传智播客教育科技股份有限公司", manager: "负责人", id: "" },
       defaultProps: {
         children: "children",
-        label: "label",
-      },
+        label: "name",
+      }, // 树形控件的属性
+      showDialog: false, //控制Dialog的显示与隐藏
+      node:null, // 记录当前点击的部门
+      loading:false
     };
   },
+  created() {
+    this.getDepartments(); // 调用获取部门列表的方法
+  },
   methods: {
-    addFn(){
-
-    },
     handleNodeClick(data) {
       console.log(data);
+    },
+    clickScope(scope) {
+      console.log(scope);
+    },
+    async getDepartments() {
+      this.loading = true;
+      const result = await getDepartments();
+      this.company = { name: result.companyName, manager: "负责人" };
+      this.departs = tranListToTreeData(result.depts, "");
+      console.log(result);
+      this.loading = false;
+    },
+    // 添加部门
+    addDepts(node) {
+      this.showDialog = true; // 显示弹层
+      this.node = node;
+    },
+    // 编辑
+    editDepts(node) {
+      // 首先打开弹层
+      this.showDialog = true;
+      this.node = node; // 赋值操作的节点
+      this.$refs.addDept.getDepartDetail(node.id); // 直接调用子组件中的方法 传入一个id
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.el-menu-demo {
-  position: relative;
-}
-.block {
-  padding: 10px 25px 0;
-}
-.person {
-  position: absolute;
-  right: -920px;
-}
-.ctrl {
-  position: absolute;
-  right: -1000px;
-  width: 70px;
-}
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.tree-card {
+  padding: 30px 120px;
   font-size: 14px;
-  padding-right:200px;
+
 }
 </style>

@@ -1,8 +1,8 @@
-import request from '@utils/request'
+import request from '../utils/request'
 //更新权限
 export function updatePermission(data){
     return request({
-        url:`/sys/permission/${id}`,
+        url:`/sys/permission/${data.id}`,
         method:'put',
         data
     })
@@ -29,7 +29,7 @@ export function addPermission(data){
     })
 }
 //获取权限
-export function getAllPermission(params){
+export function getPermissionList(params){
     return request({
         url:'/sys/permission',
         params
