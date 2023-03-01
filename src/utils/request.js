@@ -26,7 +26,7 @@ service.interceptors.request.use(
     //   return Promise.reject(new Error(message));
     // }
     response.headers["Authorization"] = `Bearer ${store.getters.token}`;
-    return response;
+    return response;  
   },
   (error) => {
     Message.error(error.message); //提示错误信息

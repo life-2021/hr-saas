@@ -5,7 +5,7 @@
       <img class="userImg" src="@/assets/common/head.jpg" alt="" />
       <div class="hello">
         <p class="userName">早安，{{ userInfo.username }} ，祝你开心每一天！</p>
-        <p>{{ userInfo.username }} | {{ userInfo.company }}</p>
+        <p>{{ userInfo.username }} | {{ userInfo.company }} - {{ userInfo.departmentName }}</p>
       </div>
     </div>
     <!-- end:头部 -->
@@ -63,12 +63,13 @@
           <div class="moduleContent">
             <el-button plain @click="applyFormVisible = true">加班离职</el-button>
             <el-button plain @click="leaveFormVisible = true">请假调休</el-button>
-            <el-button plain>审批列表</el-button>
-            <el-button plain>我的信息</el-button>
+            <el-button plain @click="approvalsFn">审批列表</el-button>
+            <el-button plain @click="userInfoFn">我的信息</el-button>
+            
             <!-- 加班离职表单 -->
             <applyForm :applyFormVisible="applyFormVisible" @applyFormCancel="applyFormCancel"> </applyForm>
             <!-- 请假调休表单 -->
-            <leaveForm></leaveForm>
+            <leaveForm :leaveFormVisible="leaveFormVisible" @leaveFormCancel="leaveFormCancel"></leaveForm>
           </div>
         </div>
         <!-- 快速开始/便捷导航 -->
@@ -110,6 +111,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import router from "@/router";
 import applyForm from "./modules/applyForm.vue";
 import leaveForm from "./modules/leaveForm.vue";
 export default {
@@ -127,7 +129,19 @@ export default {
     // 关闭申请表单
     applyFormCancel() {
       this.applyFormVisible = false;
+    },
+    // 关闭请假表单
+    leaveFormCancel() {
+      this.leaveFormVisible = false;
+    },
+    // 跳转
+    approvalsFn() {
+      this.$router.push('/approvals');
+    },
+    userInfoFn() {
+      this.$router.push('/userIfon');
     }
+
   },
   computed: {
     // 获取vuex中user模块中的token,userInfo
@@ -202,11 +216,16 @@ export default {
       margin-bottom: 20px;
       overflow: hidden;
 
-      ::v-deep .el-calendar-table .el-calendar-day {
-        width: 100px;
-        height: 40px;
+      ::v-deep .el-calendar-table {
         text-align: center;
+
+        .el-calendar-day {
+          width: 120px;
+          height: 40px;
+
+        }
       }
+
     }
 
     .announcementContainer {
