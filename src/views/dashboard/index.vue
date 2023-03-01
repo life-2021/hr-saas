@@ -111,7 +111,6 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import router from "@/router";
 import applyForm from "./modules/applyForm.vue";
 import leaveForm from "./modules/leaveForm.vue";
 export default {
@@ -124,7 +123,7 @@ export default {
   methods: {
     // 获取用户基本数据
     ...mapActions("user", {
-      testFn: "getUserProfile",
+      getUserProfileFn: "getUserProfile",
     }),
     // 关闭申请表单
     applyFormCancel() {
@@ -152,7 +151,7 @@ export default {
   },
   mounted() {
     // 获取用户信息
-    this.testFn();
+    this.getUserProfileFn();
 
   },
   components: {
