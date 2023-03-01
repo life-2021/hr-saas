@@ -11,9 +11,15 @@
         <div class="full"><i class="el-icon-full-screen"></i></div>
         <div class="user">
           <el-dropdown>
-            <span class="el-dropdown-link" size="medium">管理员<i class="el-icon-arrow-down el-icon--right"></i></span>
+            <div>
+              <div class="userPhoto">
+                <img :src="userInfo.staffPhoto" alt="">
+              </div>
+              <span class="el-dropdown-link" size="medium">{{ userInfo.username }}<i
+                  class="el-icon-arrow-down el-icon--right"></i></span>
+            </div>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-s-home"  @click.native="goHomePage">首页</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-s-home" @click.native="goHomePage">首页</el-dropdown-item>
               <el-dropdown-item icon="el-icon-switch-button" @click.native="logoutFn">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -29,7 +35,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
 
   props: {
@@ -51,6 +57,9 @@ export default {
       this.$router.push('/')
     }
   },
+  computed: {
+    ...mapState('user', ['userInfo'])
+  }
 };
 </script>
 
@@ -78,7 +87,7 @@ export default {
   .full {
     display: inline-block;
     position: absolute;
-    right: 150px;
+    right: 180px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
@@ -90,6 +99,22 @@ export default {
     right: 30px;
     font-size: 24px;
     line-height: 50px;
+
+    .userPhoto {
+      position: absolute;
+      top: 50%;
+      transform: translate(-150%, -50%);
+      display: inline-block;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 </style>

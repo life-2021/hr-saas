@@ -10,8 +10,6 @@ const service = axios.create({
 });
 
 // 请求拦截器   主要负责token的统一注入
-service.interceptors.request.use();
-// 响应拦截器   主要处理数据异常和数据结构
 service.interceptors.request.use(
   (response) => {
     // axios外层加了一层data 对数据进行解构
@@ -26,12 +24,23 @@ service.interceptors.request.use(
     //   return Promise.reject(new Error(message));
     // }
     response.headers["Authorization"] = `Bearer ${store.getters.token}`;
-    return response;  
+    return response;
   },
   (error) => {
     Message.error(error.message); //提示错误信息
     return Promise.reject(error); //返回执行错误 让当前执行链挑错成功进入catch
   }
 );
+
+// 响应拦截器   主要处理数据异常和数据结构
+service.interceptors.response.use((response) => {
+  // console.log(response);
+  if (response.status === 200) {
+    return response;
+  }
+  // else if (response.status === 401) {
+  //   console.error("response.message");
+  // }
+});
 
 export default service;

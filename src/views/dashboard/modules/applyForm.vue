@@ -103,14 +103,18 @@ export default {
                     overtimeEnd: moment(this.applyFormData.overtimeEnd).format('YYYY-MM-DD HH:mm:ss'),//加班结束时间
                     overtimeCause: this.applyFormData.overtimeCause,//加班原因
                 }
-                console.log(applyForm);
                 let res = await startProcess(applyForm);
                 if (res.status === 200) {
-                    this.applyFormCancel()
-                    this.$message({
-                        message: '提交成功！',
-                        type: 'success'
-                    })
+                    if (res.data.code === 10000) {
+                        this.applyFormCancel()
+                        this.$message({
+                            message: '提交成功！',
+                            type: 'success'
+                        })
+                    } else {
+                        this.applyFormCancel()
+                        this.$message.error(res.data.message)
+                    }
                 } else {
                     this.applyFormCancel()
                     this.$message.error("提交失败！")
@@ -123,15 +127,18 @@ export default {
                     departureTime: moment(this.applyFormData.departureTime).format('YYYY-MM-DD'),//离职时间
                     departureCause: this.applyFormData.departureCause,//离职原因
                 }
-                // console.log(applyForm);
                 let res = await startProcess(applyForm);
                 if (res.status === 200) {
-                    
-                    this.applyFormCancel()
-                    this.$message({
-                        message: '提交成功！',
-                        type: 'success'
-                    })
+                    if (res.data.code === 10000) {
+                        this.applyFormCancel()
+                        this.$message({
+                            message: '提交成功！',
+                            type: 'success'
+                        })
+                    } else {
+                        this.applyFormCancel()
+                        this.$message.error(res.data.message)
+                    }
                 } else {
                     this.applyFormCancel()
                     this.$message.error("提交失败！")
@@ -140,6 +147,7 @@ export default {
                 this.applyFormCancel()
                 this.$message.error("申请表单类型错误！")
             }
+
         },
         // 关闭表单
         applyFormCancel() {

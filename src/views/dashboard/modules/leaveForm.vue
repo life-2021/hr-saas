@@ -91,11 +91,16 @@ export default {
                 }
                 let res = await startProcess(leaveForm);
                 if (res.status === 200) {
-                    this.leaveFormCancel()
-                    this.$message({
-                        message: '提交成功！',
-                        type: 'success'
-                    })
+                    if (res.data.code === 10000) {
+                        this.leaveFormCancel()
+                        this.$message({
+                            message: '提交成功！',
+                            type: 'success'
+                        })
+                    } else {
+                        this.leaveFormCancel()
+                        this.$message.error(res.data.message)
+                    }
                 } else {
                     this.leaveFormCancel()
                     this.$message.error("提交失败！")
