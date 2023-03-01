@@ -3,9 +3,12 @@
     <div class="app-container">
     <!-- 右侧增加按钮 -->
       <page-tools :show-before="true">
+        <template v-slot:before>
+           <span slot="before">共16条记录</span>
+        </template>
         <template slot="after">
             <el-button size="small" type="primary">导入</el-button>
-            <el-button size="small" type="primary">+新增员工</el-button>
+            <el-button size="small" type="primary" @click="showDialog = true">+新增员工</el-button>
         </template>
       </page-tools>
         <el-table v-loading="loading" :data="list">
@@ -27,15 +30,24 @@
             </template>
           </el-table-column>
         </el-table>
+        <!-- 分页 -->
         <el-row type="flex" justify="center" align="middle" style="height: 60px">
-          <el-pagination layout="prev, pager, next" />
+          <el-pagination 
+          :current-page="page.page"
+          :page-size="page.size"
+          :total="page.total"
+          layout="prev, pager, next" 
+          @current-change="changePage"
+          />
         </el-row>
     </div>
+    <add-employee :show-dialog.sync="showDialog" />
   </div>
 </template>
 
 <script>
     import { getEmployeeList } from '@/api/employees'
+    import AddEmployee from './components/add-employee.vue'
     export default {
         data(){
             return{
@@ -45,20 +57,24 @@
                     size:10,
                     total:0
                 },
-                loading:false
+                loading:false,
+                showDialog:false
             }
         },
-        // created(){
-        //     this.getEmployeeList()
-        // },
+        created(){
+            this.getEmployeeLista()
+        },
         methods:{
-            async getEmployeeList() {
+            async getEmployeeLista() {
                 this.loading = true
-                const {total, rows} = await getEmployeeList(this.page)
+                const {total,rows} = await getEmployeeList()
                 this.page.total = total
                 this.list = rows
                 this.loading = false
             }
+        },
+        components:{
+          AddEmployee
         }
     }
 </script>
