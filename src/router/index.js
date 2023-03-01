@@ -28,6 +28,12 @@ const routes = [
         meta: { title: "首页" },
       },
       {
+        path: "userIfon",
+        name: "UserIfon",
+        component: () => import("@/views/dashboard/modules/userInfo.vue"),
+        meta: { title: "用户信息设置" },
+      },
+      {
         path: "departments",
         name: "Departments",
         component: () => import("@/views/departments/index"),
@@ -77,13 +83,11 @@ const routes = [
       },
     ],
   },
-
 ];
 
 const router = new VueRouter({
   mode: "history",
   routes,
 });
-
 
 export default router;

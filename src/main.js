@@ -12,8 +12,8 @@ Vue.use(ElementUI);
 import Vuex from "vuex";
 Vue.use(Vuex);
 
-import component from "./components";
-Vue.use(component);
+import Components from './components';
+Vue.use(Components);
 
 // 导入路由
 import VueRouter from "vue-router";
