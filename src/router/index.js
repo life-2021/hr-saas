@@ -19,7 +19,7 @@ const routes = [
   {
     path: "/",
     component: Layout,
-    redirect: "/social",
+    redirect: "/dashboard",
     children: [
       {
         path: "dashboard",
