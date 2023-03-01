@@ -7,7 +7,7 @@ export function getEmployeeSimple() {
   }
 
 //获取员工列表
-export function getEmployeeList(params) {
+export function getEmployeesListAPI(params) {
     return request({
         url:'/api/sys/user',
         params
