@@ -1,15 +1,15 @@
 import { getToken, setToken, removeToken } from "../../utils/auth.js";
-import { login, getUserProfileAPI } from "../../api/user.js";
+import {
+  login,
+  getUserProfileAPI,
+  getUserProfileAPI_2,
+  getUserProfileAPI_3,
+} from "../../api/user.js";
 
 // 数据
 const state = {
   token: getToken(), //设置token为共享状态  初始化的vuex时候先从缓存读取
-  userInfo: {
-    // 用户信息
-    username: "", //用户名
-    userId: "", //用户ID
-    company: "", //公司名
-  },
+  userInfo: {}, // 用户信息
 };
 
 // 同步
@@ -19,18 +19,14 @@ const mutations = {
     state.token = token; //将token给vuex
     setToken(token);
   },
-  // 移除koten
+  // 清理koten
   removeToken(state) {
-    state.token = token; //清空vuex中的token
-    removeToken();
+    state.token = ""; //清空vuex中的token
+    removeToken(); //清理cookie的token
   },
   // 存储用户信息
   setUser(state, data) {
-    // console.log(data);
-    state.userInfo.username = data.username;
-    state.userInfo.userId = data.userId;
-    state.userInfo.company = data.company;
-
+    state.userInfo = data; 
   },
 };
 
@@ -41,6 +37,11 @@ const actions = {
     const result = await login(data); //调用user接口模块的login接口拿到token
     context.commit("setToken", result.data.data); //设置token
   },
+  // 登出
+  async logout(context) {
+    // 清理token
+    context.commit("removeToken");
+  },
 
   // 获取用户信息
   async getUserProfile(context) {
@@ -48,8 +49,29 @@ const actions = {
     const result = await getUserProfileAPI({
       "Content-Type": "application/x-www-form-urlencoded",
     });
-    // console.log(result.data.data);
-    context.commit("setUser", result.data.data); //设置userInfo
+    const result2 = await getUserProfileAPI_2({
+      id: result.data.data.userId,
+    });
+    const result3 = await getUserProfileAPI_3({
+      id: result.data.data.userId,
+    });
+    // console.log(result);
+    // console.log(result2);
+    // console.log(result3);
+    let userInfo = {
+      userId: result.data.data.userId,
+      username: result.data.data.username,
+      sex: result3.data.data.sex,
+      birthday: result3.data.data.dateOfBirth,
+      mobile: result.data.data.mobile,
+      companyId: result.data.data.companyId,
+      company: result.data.data.company,
+      departmentId: result2.data.data.departmentId,
+      departmentName: result2.data.data.departmentName,
+      staffPhoto: result2.data.data.staffPhoto,
+    };
+    // console.log(userInfo);
+    context.commit("setUser", userInfo); //设置userInfo
   },
 };
 

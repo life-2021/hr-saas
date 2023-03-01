@@ -1,6 +1,6 @@
 <template>
     <div>
-        审批666
+        <h1>审批页面</h1>
     </div>
 </template>
 

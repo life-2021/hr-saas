@@ -1,6 +1,7 @@
 <template>
     <div>
-        <el-dialog title="申请" :visible.sync="applyFormVisible" :showClose="false" ref="from" :close-on-click-modal='false'>
+        <el-dialog title="申请" :visible.sync="applyFormVisible" :showClose="false" ref="from" :close-on-click-modal='false'
+            :close-on-press-escape="false">
             <el-form>
                 <!-- 申请类型 -->
                 <el-form-item label="申请类型：">
@@ -52,7 +53,7 @@
                 </div>
                 <!-- 提交取消重置 -->
                 <el-form-item>
-                    <el-button type="primary" @click="applyFormCancel">提交</el-button>
+                    <el-button type="primary" @click="applyFormSubmit">提交</el-button>
                     <el-button @click="resetForm">重置</el-button>
                     <el-button @click="applyFormCancel">取消</el-button>
                 </el-form-item>
@@ -62,6 +63,9 @@
 </template>
 
 <script>
+import moment, { months } from "moment"
+import { startProcess } from '@/api/approvals';
+import { mapState } from 'vuex';
 export default {
     data() {
         return {
@@ -72,6 +76,7 @@ export default {
                 overtimeStart: '',//加班开始时间
                 overtimeEnd: '',//加班结束时间
                 overtimeCause: '',//加班原因
+
             },
             nullFrom: {
                 applyType: '加班',//申请类型：加班 离职
@@ -86,8 +91,65 @@ export default {
 
     },
     methods: {
-        // 将表单状态设置为关闭
-        
+        // 提交表单
+        async applyFormSubmit() {
+            let applyForm = {};
+            if (this.applyFormData.applyType === '加班') {
+                applyForm = {
+                    userId: this.userInfo.userId,//申请人ID
+                    username: this.userInfo.username,//申请人名称
+                    procApplyTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),//申请时间
+                    overtimeStart: moment(this.applyFormData.overtimeStart).format('YYYY-MM-DD HH:mm:ss'),//加班开始时间
+                    overtimeEnd: moment(this.applyFormData.overtimeEnd).format('YYYY-MM-DD HH:mm:ss'),//加班结束时间
+                    overtimeCause: this.applyFormData.overtimeCause,//加班原因
+                }
+                let res = await startProcess(applyForm);
+                if (res.status === 200) {
+                    if (res.data.code === 10000) {
+                        this.applyFormCancel()
+                        this.$message({
+                            message: '提交成功！',
+                            type: 'success'
+                        })
+                    } else {
+                        this.applyFormCancel()
+                        this.$message.error(res.data.message)
+                    }
+                } else {
+                    this.applyFormCancel()
+                    this.$message.error("提交失败！")
+                }
+            } else if (this.applyFormData.applyType === '离职') {
+                applyForm = {
+                    userId: this.userInfo.userId,//申请人ID
+                    username: this.userInfo.username,//申请人名称
+                    procApplyTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),//表单提交时间
+                    departureTime: moment(this.applyFormData.departureTime).format('YYYY-MM-DD'),//离职时间
+                    departureCause: this.applyFormData.departureCause,//离职原因
+                }
+                let res = await startProcess(applyForm);
+                if (res.status === 200) {
+                    if (res.data.code === 10000) {
+                        this.applyFormCancel()
+                        this.$message({
+                            message: '提交成功！',
+                            type: 'success'
+                        })
+                    } else {
+                        this.applyFormCancel()
+                        this.$message.error(res.data.message)
+                    }
+                } else {
+                    this.applyFormCancel()
+                    this.$message.error("提交失败！")
+                }
+            } else {
+                this.applyFormCancel()
+                this.$message.error("申请表单类型错误！")
+            }
+
+        },
+        // 关闭表单
         applyFormCancel() {
             // 重置表单
             this.resetForm()
@@ -99,6 +161,12 @@ export default {
             // 深拷贝
             this.applyFormData = JSON.parse(JSON.stringify(this.nullFrom));
         },
+    },
+    computed: {
+        // 获取vuex中user模块中的token,userInfo
+        ...mapState("user", {
+            userInfo: (state) => state.userInfo,
+        }),
     },
     props: {
         applyFormVisible: Boolean,
@@ -112,6 +180,7 @@ export default {
     height: 40px;
 
     .el-dialog__title {
+        color: #fff;
         font-size: 2rem;
         line-height: 30px;
     }
