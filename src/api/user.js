@@ -24,6 +24,6 @@ export function getUserProfileAPI(data) {
 //   });
 // }
 
-export function logout() {}
+export function logout() { }
 
 
