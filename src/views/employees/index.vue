@@ -4,16 +4,18 @@
     <!-- 右侧增加按钮 -->
       <page-tools :show-before="true">
         <template v-slot:before>
-           <span slot="before">共16条记录</span>
+           <span slot="before">共{{ total }}条记录</span>
         </template>
         <template slot="after">
             <el-button size="small" type="primary">导入</el-button>
             <el-button size="small" type="primary" @click="showDialog = true">+新增员工</el-button>
         </template>
       </page-tools>
-        <el-table v-loading="loading" :data="list">
-          <el-table-column label="序号" sortable="" />
-          <el-table-column label="姓名" sortable="" />
+        <el-table  :data="employeesList">
+          <el-table-column label="序号" sortable="" type="index" />
+          <el-table-column label="姓名" sortable="" prop="username"/>
+          <el-table-column label="头像" sortable="" />
+          <el-table-column label="手机号" sortable="" />
           <el-table-column label="工号" sortable="" />
           <el-table-column label="聘用形式" sortable="" />
           <el-table-column label="部门" sortable="" />
@@ -32,54 +34,45 @@
         </el-table>
         <!-- 分页 -->
         <el-row type="flex" justify="center" align="middle" style="height: 60px">
-          <el-pagination 
-          :current-page="page.page"
-          :page-size="page.size"
-          :total="page.total"
-          layout="prev, pager, next" 
-          @current-change="changePage"
-          />
+          <el-pagination layout="prev, pager, next" />
         </el-row>
     </div>
-    <add-employee :show-dialog.sync="showDialog" />
+    <!-- <add-employee :show-dialog.sync="showDialog" /> -->
   </div>
 </template>
 
 <script>
-    import { getEmployeeList } from '@/api/employees'
-    import AddEmployee from './components/add-employee.vue'
+    import { getEmployeesListAPI } from '@/api/employees'
+    // import AddEmployee from './components/add-employee.vue'
     export default {
         data(){
             return{
-                list:[],
-                page:{
-                    page:1,
-                    size:10,
-                    total:0
+                employeesList:[],  //员工列表
+                query:{
+                    page:1,    //页码
+                    size:10,   //每页条数
                 },
-                loading:false,
+                total:0,    //数据总条数
                 showDialog:false
             }
         },
-        created(){
-            this.getEmployeeLista()
-        },
         methods:{
-            async getEmployeeLista() {
-                this.loading = true
-                const {total,rows} = await getEmployeeList()
-                this.page.total = total
-                this.list = rows
-                this.loading = false
+            async getEmployeeListFn() {
+                const res = await getEmployeesListAPI(this.query)
+                console.log(res)
+                this.employeesList = res.data.rows
+                this.total = res.data.total
             }
         },
-        components:{
-          AddEmployee
-        }
+        created(){
+            this.getEmployeeListFn()
+        },
+        // components:{
+        //   AddEmployee
+        // }
     }
 </script>
 
-<style scoped>
+<style>
   
-    
 </style>
