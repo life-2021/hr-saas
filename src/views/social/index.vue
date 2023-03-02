@@ -19,8 +19,7 @@
         <!-- 部门筛选 -->
         <el-form-item label="部门" style="font-weight: 800;">
           <el-checkbox-group v-model="form.departmentChecks">
-            <el-checkbox v-for="item in departmentsList" :key="item.id" :label="item.id" name="departments"
-              @change="testFn">
+            <el-checkbox v-for="item in departmentsList" :key="item.id" :label="item.id" name="departments">
               {{ item.name }}
             </el-checkbox>
 
