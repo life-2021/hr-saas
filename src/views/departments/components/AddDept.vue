@@ -81,17 +81,10 @@ export default {
     },
   },
   data() {
-    // 现在定义一个函数 这个函数的目的是 去找 同级部门下 是否有重复的部门名称
     const checkNameRepeat = async (rule, value, callback) => {
-      // 先要获取最新的组织架构数据
       const { depts } = await getDepartments();
-      //  检查重复规则 需要支持两种 新增模式 / 编辑模式
-      // depts是所有的部门数据
-      // 如何去找技术部所有的子节点
       let isRepeat = false;
       if (this.formData.id) {
-        // 有id就是编辑模式
-        // 编辑 张三 => 校验规则 除了我之外 同级部门下 不能有叫张三的
         isRepeat = depts
           .filter(
             (item) =>
@@ -99,7 +92,6 @@ export default {
           )
           .some((item) => item.name === value);
       } else {
-        // 没id就是新增模式
         isRepeat = depts
           .filter((item) => item.pid === this.treeNode.id)
           .some((item) => item.name === value);
@@ -109,9 +101,7 @@ export default {
         ? callback(new Error(`同级部门下已经有${value}的部门了`))
         : callback();
     };
-    // 检查编码重复
     const checkCodeRepeat = async (rule, value, callback) => {
-      // 先要获取最新的组织架构数据
       //  检查重复规则 需要支持两种 新增模式 / 编辑模式
       const { depts } = await getDepartments();
       let isRepeat = false;
@@ -216,7 +206,6 @@ export default {
       });
     },
     btnCancel() {
-      // 重置数据  因为resetFields 只能重置 表单上的数据 非表单上的 比如 编辑中id 不能重置
       this.formData = {
         name: "",
         code: "",
@@ -230,7 +219,6 @@ export default {
     // 获取部门详情
     async getDepartDetail(id) {
       this.formData = await getDepartDetail(id);
-      // 这里不能直接写 this.treeNode.id ，因为 props 传值 是异步的
     },
   },
   components: {},

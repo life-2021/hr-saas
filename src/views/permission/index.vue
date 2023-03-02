@@ -78,11 +78,34 @@ import {
   delPermission,
   getPermissionDetail,
 } from "../../api/permission.js";
-import { tranListToTreeData } from "../../utils/departments";
-    export default {
-    methods: {
-      async getPermissionList() {
-      this.list = tranListToTreeData(await getPermissionList(), "0");
+import { tranListToTreeData } from "../../utils/index";
+export default {
+  data() {
+    return {
+      list: [],
+      formData: {
+        name: "", // 名称
+        code: "", // 标识
+        description: "", // 描述
+        type: "", // 类型 该类型 不需要显示 因为点击添加的时候已经知道类型了
+        pid: "", // 因为做的是树 需要知道添加到哪个节点下了
+        enVisible: "0", // 开启
+      },
+      rules: {
+        name: [
+          { required: true, message: "权限名称不能为空", trigger: "blur" },
+        ],
+        code: [
+          { required: true, message: "权限标识不能为空", trigger: "blur" },
+        ],
+      },
+      showDialog: false,
+    };
+  },
+  methods: {
+    async getPermissionList() {
+      const result = await getPermissionList();
+      this.list = tranListToTreeData(result.data.data, "0");
       console.log("权限接口获取的数据", this.list);
     },
     // 删除操作
@@ -134,40 +157,17 @@ import { tranListToTreeData } from "../../utils/departments";
       this.formData = await getPermissionDetail(id);
       this.showDialog = true;
     },
-    },
-    created(){
-      this.getPermissionList();
-    },
-    computed: {
+  },
+  created() {
+    this.getPermissionList();
+  },
+  computed: {
     showText() {
       return this.formData.id ? "编辑" : "新增";
     },
   },
-    data() {
-      return {
-          list: [],
-      formData: {
-        name: "", // 名称
-        code: "", // 标识
-        description: "", // 描述
-        type: "", // 类型 该类型 不需要显示 因为点击添加的时候已经知道类型了
-        pid: "", // 因为做的是树 需要知道添加到哪个节点下了
-        enVisible: "0", // 开启
-      },
-      rules: {
-        name: [
-          { required: true, message: "权限名称不能为空", trigger: "blur" },
-        ],
-        code: [
-          { required: true, message: "权限标识不能为空", trigger: "blur" },
-        ],
-      },
-      showDialog: false,   
-      }
-    }
-  }
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>
