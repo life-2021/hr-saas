@@ -148,17 +148,19 @@ import { mapGetters } from 'vuex'
     async getRolesList() {
       // 发起请求
       const res = await getRolesAPI(this.query)
+      console.log(res)
       // 根据返回的状态码进行业务处理
-      if (!res.success) return this.$message.error(res.message)
+      if (!res.data.success) return this.$message.error(res.data.message)
       // 将返回的数据进行赋值
-      this.rolesList = res.data.rows
-      this.total = res.data.total
+      this.rolesList = res.data.data.rows
+      console.log(this.rolesList)
+      this.total = res.data.data.total
     },
     // 获取的公司的信息
     async getCompanyInfo() {
       const res = await getCompanyInfoAPI(this.companyId)
-      if (!res.success) return this.$message.error(res.message)
-      this.formData = res.data
+      if (!res.data.success) return this.$message.error(res.data.message)
+      this.formData = res.data.data
     },
     // 每页显示的条数发生改变时触发
     handleSizeChange(newSize) {
@@ -181,8 +183,8 @@ import { mapGetters } from 'vuex'
       this.isEdit = true
       // 调用接口，获取需要编辑的角色数据
       const res = await getRoleIdAPI(dataObj.id)
-      if (!res.success) return this.$message.error(res.message)
-      this.roleForm = res.data
+      if (!res.data.success) return this.$message.error(res.data.message)
+      this.roleForm = res.data.data
       // 让弹框展示
       this.showDialog = true
     },
@@ -211,9 +213,9 @@ import { mapGetters } from 'vuex'
       const res = await deleteRoleAPI(dataObj.id)
 
       // 根据返回的状态码进行错误提示
-      if (!res.success) return this.$message.error(res.message)
+      if (!res.data.success) return this.$message.error(res.data.message)
       // 删除成功后的提示
-      this.$message.success(res.message)
+      this.$message.success(res.data.data.message)//g
       // 重新获取数据
       this.getRolesList()
     },
@@ -226,16 +228,16 @@ import { mapGetters } from 'vuex'
           // 调用新增角色的 API
             const res = await addRoleAPI(this.roleForm)
             // 根据状态码判断请求成功与否
-            if (!res.success) return this.$message.error(res.message)
+            if (!res.data.success) return this.$message.error(res.data.message)
             // 添加成功，给用户进行提示
-            this.$message.success(res.message)
+            this.$message.success(res.data.message)//g
           } else {
           // 调用编辑角色的 API
             const res = await updateRoleAPI(this.roleForm)
             // 根据状态码判断请求成功与否
-            if (!res.success) return this.$message.error(res.message)
+            if (!res.data.success) return this.$message.error(res.data.message)
             // 编辑成功，给用户进行提示
-            this.$message.success(res.message)
+            this.$message.success(res.data.message)//g
           }
 
           // 重新获取权限列表数据
