@@ -42,6 +42,12 @@ export function getUserProfileAPI_3(data) {
 //   });
 // }
 
-export function logout() { }
+
+//获取用户的基本信息
+export function getUserDetailById(id) {
+  return request({
+    url: `/api/sys/user/${id}`
+  })
+}
 
 
