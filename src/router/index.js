@@ -19,7 +19,7 @@ const routes = [
   {
     path: "/",
     component: Layout,
-    redirect: "/dashboard",
+    redirect: "/historicalArchiving",
     children: [
       {
         path: "dashboard",
@@ -62,6 +62,13 @@ const routes = [
         name: "Social",
         component: () => import("@/views/social/index"),
         meta: { title: "社保" },
+      },
+      {
+        path: "historicalArchiving",
+        name: "HistoricalArchiving",
+        component: () =>
+          import("@/views/social/components/historicalArchiving"),
+        meta: { title: "社保-历史档案" },
       },
       {
         path: "attendances",
