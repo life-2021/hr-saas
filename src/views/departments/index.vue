@@ -55,12 +55,12 @@ export default {
     this.getDepartments(); // 调用获取部门列表的方法
   },
   methods: {
-    handleNodeClick(data) {
-      console.log(data);
-    },
-    clickScope(scope) {
-      console.log(scope);
-    },
+    // handleNodeClick(data) {
+    //   console.log(data);
+    // },
+    // clickScope(scope) {
+    //   console.log(scope);
+    // },
     async getDepartments() {
       // this.loading = true;
       const result = await getDepartments();
@@ -72,7 +72,7 @@ export default {
     // 添加部门
     addDepts(node) {
       this.showDialog = true; // 显示弹层
-      this.node = node;
+      this.node = node;    
     },
     // 编辑
     editDepts(node) {
