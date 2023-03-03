@@ -56,3 +56,15 @@ export function saveUserDetailById(data) {
     data
   })
 }
+
+/** **
+ *
+ * 导入员工数据  参数data是一个数组类型
+ * ****/
+export function importEmployee(data) {
+    return request({
+      url: '/api/sys/user/batch',
+      method: 'post',
+      data
+    })
+  }

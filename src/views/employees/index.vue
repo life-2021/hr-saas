@@ -7,11 +7,11 @@
            <span slot="before">共{{ total }}条记录</span>
         </template>
         <template slot="after">
-            <el-button size="small" type="primary">导入</el-button>
+            <el-button size="small" type="primary" @click="toImport">导入</el-button>
             <el-button size="small" type="primary" @click="showDialog = true">+新增员工</el-button>
         </template>
       </page-tools>
-        <el-table  :data="employeesList">
+        <el-table  :data="employeesList" class="Table">
           <el-table-column label="序号" sortable="" type="index" />
           <el-table-column label="姓名" sortable="" prop="username" />
           <el-table-column label="工号" sortable="" prop="workNumber" />
@@ -25,11 +25,11 @@
           </el-table-column>
           <el-table-column label="操作" sortable="" fixed="right" width="280">
             <template slot-scope="{ row }">
-              <el-button type="text" size="small" @click="$router.push(`/employees/detail/${obj.row.id}`)">查看</el-button>
+              <el-button type="text" size="small" @click="$event =>lookDeatilFn(row.id)">查看</el-button>
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="editRole(row.id)">角色</el-button>
               <el-button type="text" size="small" @click="delEmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -82,6 +82,12 @@
               } catch (error) {
                 console.log(error)
               }
+            },
+            lookDeatilFn(id){
+              this.$router.push(`/detail?id=${id}`)
+            },
+            toImport(){
+              this.$router.push(`/import`)
             }
         },
         mounted(){
@@ -94,5 +100,7 @@
 </script>
 
 <style>
-  
+    .Table{
+      width: 1300px;
+    }
 </style>

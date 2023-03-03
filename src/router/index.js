@@ -46,6 +46,14 @@ const routes = [
         meta: { title: "员工" },
       },
       {
+        path:"detail",    //员工详情
+        component: () => import("@/views/employees/detail"),
+      },
+      {
+        path:"import",    //员工详情
+        component: () => import("@/views/import"),
+      },
+      {
         path: "setting",
         name: "Setting",
         component: () => import("@/views/setting/index"),
