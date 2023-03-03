@@ -47,3 +47,11 @@ export function deleteRoleAPI(id) {
         method: 'delete'
     })
 }
+//分配权限
+export function assignPerm(data) {
+    return request({
+        url: '/api/sys/role/assignPrem',
+        method: 'put',
+        data
+    })
+}

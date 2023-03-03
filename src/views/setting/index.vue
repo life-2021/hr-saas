@@ -98,14 +98,45 @@
           </el-col>
         </el-row>
       </el-dialog>
+
+ <!-- 分配权限弹层 -->
+ <el-dialog title="分配权限" :visible.sync="dialogVisible">
+  <assign-permission v-model="dialogVisible" />
+ </el-dialog>
+      <!-- 分配权限弹层 -->
+        <!-- <el-dialog title="分配权限" :visible="showPermDialog">
+          <el-tree
+            ref="permTree"
+            :data="permData"
+            :props="defaultProps"
+            :show-checkbox="true"
+            :check-strictly="true"
+            :default-expand-all="true"
+            :default-checked-keys="selectCheck"
+            node-key="id"
+          /> -->
+          <!-- 确定 取消 -->
+      <!-- <el-row slot="footer" type="flex" justify="center">
+            <el-col :span="6">
+              <el-button type="primary" size="small" @click="btnPermOK">确定</el-button>
+              <el-button size="small" @click="btnPermCancel">取消</el-button>
+            </el-col>
+          </el-row>
+        </el-dialog> -->
     </div>
 </div>
 </template>
 
 <script>
-import { getRolesAPI, getCompanyInfoAPI, addRoleAPI, getRoleIdAPI, updateRoleAPI, deleteRoleAPI } from '@/api/setting'
+import { getRolesAPI, getCompanyInfoAPI, addRoleAPI, getRoleIdAPI, updateRoleAPI, deleteRoleAPI,assignPerm } from '@/api/setting'
 import { mapGetters } from 'vuex'
+import AssingPermission from './assingPermission.vue'
+import { getPermissionListAPI } from '@/api/permission'
+// import { tranListToTreeData } from '@/utils'
     export default {
+      components:{
+        AssingPermission
+      },
            data() {
     return {
       activeName: 'first',
@@ -131,7 +162,8 @@ import { mapGetters } from 'vuex'
           { required: true, message: '角色描述不能为空', trigger: 'blur' }
         ]
       },
-      isEdit: false // 是否处于编辑状态
+      isEdit: false, // 是否处于编辑状态
+      dialogVisible:false//显示或隐藏 分配权限点的弹窗
     }
   },
   computed: {
@@ -142,8 +174,14 @@ import { mapGetters } from 'vuex'
     this.getRolesList()
     // 调用获取公司信息的方法
     this.getCompanyInfo()
+    //获取所有权限
+    this.getPermissionListFn()
   },
   methods: {
+    async getPermissionListFn(){
+      const res = await getPermissionListAPI()
+      console.log(res)
+    },
     // 获取角色列表
     async getRolesList() {
       // 发起请求
@@ -175,7 +213,9 @@ import { mapGetters } from 'vuex'
     },
 
     // 设置角色
-    setRoles() {},
+    setRoles(roleObj) {
+      this.dialogVisible=true
+    },
 
     // 编辑角色
     async editRoles(dataObj) {
@@ -215,7 +255,7 @@ import { mapGetters } from 'vuex'
       // 根据返回的状态码进行错误提示
       if (!res.data.success) return this.$message.error(res.data.message)
       // 删除成功后的提示
-      this.$message.success(res.data.data.message)//g
+      this.$message.success(res.data.message)//g
       // 重新获取数据
       this.getRolesList()
     },
@@ -272,7 +312,27 @@ import { mapGetters } from 'vuex'
     // 关闭角色弹框
     closeRoleDialog() {
       this.$refs.roleForm.resetFields()
-    }
+    },
+
+    //分配权限
+    // async assignPerm(id) {
+    //   this.permData = tranListToTreeData(await getPermissionList(),'0')
+    //   this.roleId = id
+    //   // 回填数据
+    //   const { permIds } = await deleteRoleAPI(id)
+    //   this.selectCheck = permIds//当前角色权限赋值
+    //   this.showPermDialog = true
+    // },
+    // async btnPermOK() {
+    //   await assignPerm({
+    //     permIds: this.$refs.permTree.getCheckedKeys(), id: this.roleId
+    //   })
+    //   this.$message.success('分配成功')
+    //   this.showPermDialog = false
+    // },
+    // btnPermCancel() {
+    //   this.showPermDialog = false
+    // }
   }
     }
 </script>
