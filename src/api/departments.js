@@ -3,14 +3,15 @@ import request from '../utils/request'
 // 查询企业的部门列表
 export function getDepartments() {
     return request({
-        url: '/company/department'
+        url: '/api/company/department',
+        method:'get'
     })
 }
 
 // 新增部门
 export function addDepartments(data) {
     return request({
-        url: '/company/department',
+        url: '/api/company/department',
         method: 'post',
         data
     })
@@ -19,7 +20,7 @@ export function addDepartments(data) {
 // 根据id删除部门
 export function delDepartments(id) {
     return request({
-        url: `/company/department/${id}`,
+        url: `/api/company/department/${id}`,
         method: 'delete'
     })
 }
@@ -27,15 +28,15 @@ export function delDepartments(id) {
 // 获取部门详情数据 
 export function getDepartDetail(id) {
     return request({
-        url: `/company/department/${id}`
+        url: `/api/company/department/${id}`,
+        method: 'get'
     })
 }
 
 // 编辑部门信息
-export function updateDepartments(data) {
+export function updateDepartments(id) {
     return request({
-        url: `/company/department/${data.id}`,
-        method: 'put',
-        data
+        url: `/api/company/department/${id}`,
+        method: 'put'
     })
 }

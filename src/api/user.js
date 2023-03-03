@@ -8,7 +8,7 @@ export function login(data) {
     data,
   });
 }
-// 获取用户数据接口
+// 获取用户数据接口`
 // 获取用户基本信息
 export function getUserProfileAPI(data) {
   return request({
@@ -42,6 +42,12 @@ export function getUserProfileAPI_3(data) {
 //   });
 // }
 
-export function logout() { }
+
+//获取用户的基本信息
+export function getUserDetailById(id) {
+  return request({
+    url: `/api/sys/user/${id}`
+  })
+}
 
 
