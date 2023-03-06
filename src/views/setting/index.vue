@@ -100,8 +100,13 @@
       </el-dialog>
 
  <!-- 分配权限弹层 -->
- <el-dialog title="分配权限" :visible.sync="dialogVisible">
-  <assign-permission v-model="dialogVisible" />
+ <el-dialog title="分配权限" :visible.sync="dialogVisible" @close="perdialogCloseFn">
+  <assign-permission
+   v-model="dialogVisible" 
+  :permission-list="PermissionList"
+  :perm-ids="permIds"
+  @addperEV="addpermissionFn"
+   />
  </el-dialog>
       <!-- 分配权限弹层 -->
         <!-- <el-dialog title="分配权限" :visible="showPermDialog">
@@ -128,14 +133,14 @@
 </template>
 
 <script>
-import { getRolesAPI, getCompanyInfoAPI, addRoleAPI, getRoleIdAPI, updateRoleAPI, deleteRoleAPI,assignPerm } from '@/api/setting'
+import { getRolesAPI, getCompanyInfoAPI, addRoleAPI, getRoleIdAPI, updateRoleAPI, deleteRoleAPI, getRoleDetailAPI, assignPermAPI} from '@/api/setting'
 import { mapGetters } from 'vuex'
-import AssingPermission from './assingPermission.vue'
+import AssignPermission from './assignPermission.vue'
 import { getPermissionListAPI } from '@/api/permission'
-// import { tranListToTreeData } from '@/utils'
+import { tranListToTreeData } from '@/utils'
     export default {
       components:{
-        AssingPermission
+        AssignPermission
       },
            data() {
     return {
@@ -163,7 +168,10 @@ import { getPermissionListAPI } from '@/api/permission'
         ]
       },
       isEdit: false, // 是否处于编辑状态
-      dialogVisible:false//显示或隐藏 分配权限点的弹窗
+      dialogVisible:false,//显示或隐藏 分配权限点的弹窗
+      permissioList:[],//所有权限点
+      permIds:[],//此角色id(权限id)
+      clickRoleId:''//分配时角色id
     }
   },
   computed: {
@@ -175,23 +183,22 @@ import { getPermissionListAPI } from '@/api/permission'
     // 调用获取公司信息的方法
     this.getCompanyInfo()
     //获取所有权限
-    this.getPermissionListFn()
+    this.getPermissionList()
   },
   methods: {
-    async getPermissionListFn(){
+    async getPermissionList(){
       const res = await getPermissionListAPI()
-      console.log(res)
+      // console.log(res)
+      this.PermissionList=tranListToTreeData(res.data.data,'0')
     },
     // 获取角色列表
     async getRolesList() {
       // 发起请求
       const res = await getRolesAPI(this.query)
-      console.log(res)
       // 根据返回的状态码进行业务处理
       if (!res.data.success) return this.$message.error(res.data.message)
       // 将返回的数据进行赋值
       this.rolesList = res.data.data.rows
-      console.log(this.rolesList)
       this.total = res.data.data.total
     },
     // 获取的公司的信息
@@ -213,8 +220,13 @@ import { getPermissionListAPI } from '@/api/permission'
     },
 
     // 设置角色
-    setRoles(roleObj) {
+    async setRoles(roleObj) {
+      this.clickRoleId=roleObj.id
       this.dialogVisible=true
+      const res = await getRoleDetailAPI(roleObj.id)
+      this. permIds = res.data.data.permIds
+      // this.total = res.data.data.total
+      
     },
 
     // 编辑角色
@@ -313,6 +325,19 @@ import { getPermissionListAPI } from '@/api/permission'
     closeRoleDialog() {
       this.$refs.roleForm.resetFields()
     },
+
+
+//分配权限点弹窗关闭方法
+perDialogCloseFn(){
+  this.permIds=[]
+},
+async addpermissionFn(permIdsList){
+    await assignPermAPI({
+        id:this.clickRoleId,
+        permIds:permIdsList
+    })
+    this.getRolesList()
+}
 
     //分配权限
     // async assignPerm(id) {
