@@ -46,29 +46,24 @@ export default {
       type: Object, //对象类型
     },
     isRoot: {
-      //是否为根节点---控制组件的不同信息的展示
-      default: false,
       type: Boolean,
+      default: false,
     },
   },
   methods: {
     operateDepts(type) {
       if (type === "add") {
         // 添加子部门的操作
-        this.$emit("addDepts", this.treeNode); // 为何传出treeNode 因为是添加子部门 需要当前部门的数据
+        this.$emit("addDepts", this.treeNode); 
       } else if (type === "edit") {
         //  编辑部门的操作
         this.$emit("editDepts", this.treeNode);
       } else {
         //  删除操作
-        this.$confirm("确定要删除该部门吗")
-          .then(() => {
-            // 如果点击了确定就会进入then
-            return delDepartments(this.treeNode.id); // 返回promise对象
-          })
-          .then(() => {
-            //  如果删除成功了  就会进入这里
-            // 后端数据变了，前端还没有变
+        this.$confirm("确定要删除该部门吗").then(() => {
+            return delDepartments(this.treeNode.id); 
+          }).then(() => {
+
             this.$emit("delDepts"); // 触发自定义事件
             this.$message.success("删除部门成功");
           });

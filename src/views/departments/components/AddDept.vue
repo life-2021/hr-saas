@@ -66,8 +66,8 @@ import {
   addDepartments,
   getDepartDetail,
   updateDepartments,
-} from "@/api/departments";
-import { getEmployeeSimple } from "@/api/employees";
+} from "../../../api/departments";
+import { getEmployeeSimple } from "../../../api/employees";
 export default {
   props: {
     showDialog: {
@@ -92,9 +92,7 @@ export default {
           )
           .some((item) => item.name === value);
       } else {
-        isRepeat = depts
-          .filter((item) => item.pid === this.treeNode.id)
-          .some((item) => item.name === value);
+        isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value);
       }
 
       isRepeat
@@ -107,17 +105,13 @@ export default {
       let isRepeat = false;
       if (this.formData.id) {
         // 编辑模式  因为编辑模式下 不能算自己
-        isRepeat = depts.some(
-          (item) => item.id !== this.formData.id && item.code === value && value
-        );
+        isRepeat = depts.some(item => item.id !== this.formData.id&& item.code === value && value)
       } else {
         // 新增模式
-        isRepeat = depts.some((item) => item.code === value && value); // 这里加一个 value不为空 因为我们的部门有可能没有code
+        isRepeat = depts.some(item => item.code === value && value); // 这里加一个 value不为空 因为我们的部门有可能没有code
       }
 
-      isRepeat
-        ? callback(new Error(`组织架构中已经有部门使用${value}编码`))
-        : callback();
+      isRepeat ? callback(new Error(`组织架构中已经有部门使用${value}编码`)) : callback();
     };
     return {
       formData: {
@@ -162,25 +156,23 @@ export default {
             trigger: "blur",
             min: 1,
             max: 300,
-            message: "部门介绍要求1-50个字符",
+            message: "部门介绍要求1-300个字符",
           },
         ],
       },
       peoples: [], // 接收获取的员工简单列表的数据
     };
   },
-  created() {},
-  mounted() {},
-  watch: {},
+
   computed: {
     showTitle() {
-      return this.formData.id ? "编辑部门" : "新增子部门";
+      return this.formData.id ? "编辑部门" : "新增部门";
     },
   },
   methods: {
     async getEmployeeSimple() {
       this.peoples = await getEmployeeSimple();
-      console.log(this.peoples);
+      // console.log(this.peoples);
     },
     // 点击确定
     btnOK() {
@@ -221,7 +213,7 @@ export default {
       this.formData = await getDepartDetail(id);
     },
   },
-  components: {},
+
 };
 </script>
 
