@@ -8,8 +8,11 @@
         <div v-if="!isCollapse" class="ico el-icon-s-fold" @click="changeIsCollapse"></div>
         <div v-else class="ico el-icon-s-unfold" @click="changeIsCollapse"></div>
         <div class="itile">南昌中兴软件技术公司</div>
-        <!-- <div class="full"><i class="el-icon-full-screen"></i></div> -->
         <div class="user">
+          <div class="fullBox">
+            <div class="full" v-if="!isFull" @click="fullScreen"><i class="el-icon-zoom-in" style="font-size: 30px;"></i></div>
+            <div class="full" v-else @click="exitScreen"><i class="el-icon-zoom-out" style="font-size: 30px;"></i></div>
+          </div>
           <el-dropdown>
             <div>
               <div class="userPhoto">
@@ -37,7 +40,11 @@
 <script>
 import { mapState } from "vuex";
 export default {
-
+  data() {
+    return {
+      isFull: false,
+    }
+  },
   props: {
     isCollapse: Boolean,
   },
@@ -55,6 +62,30 @@ export default {
     },
     goHomePage() {
       this.$router.push('/')
+    },
+    fullScreen() {
+      var el = document.documentElement;
+      var request_full_screen = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+      if (typeof request_full_screen != "undefined" && request_full_screen) {
+        request_full_screen.call(el);
+      };
+      this.isFull = !this.isFull;
+      return;
+    },
+    exitScreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      if (typeof request_full_screen != "undefined" && request_full_screen) {
+        request_full_screen.call(el);
+      }
+      this.isFull = !this.isFull;
     }
   },
   computed: {
@@ -84,14 +115,7 @@ export default {
     color: #fff;
   }
 
-  .full {
-    display: inline-block;
-    position: absolute;
-    right: 180px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px;
-  }
+
 
   .user {
     display: inline-block;
@@ -99,6 +123,18 @@ export default {
     right: 30px;
     font-size: 24px;
     line-height: 50px;
+
+    .fullBox {
+      display: inline-block;
+
+      .full {
+        display: inline-block;
+        position: absolute;
+        top: 60%;
+        right: 6.5vw;
+        transform: translateY(-50%);
+      }
+    }
 
     .userPhoto {
       position: absolute;

@@ -41,7 +41,7 @@
                     <!-- 操作 -->
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-button type="primary" icon="el-icon-edit" size="mini"
+                            <el-button type="primary" icon="el-icon-view" size="mini"
                                 @click="approvalDetailFn(scope.row.processId)">查看</el-button>
                         </template>
                     </el-table-column>

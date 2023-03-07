@@ -44,10 +44,9 @@
             <h4>审批记录</h4>
             <el-divider></el-divider>
             <el-timeline v-model="reverse" size="large">
-                <el-timeline-item v-for="(activity, index) in activities" :key="index"
-                    :timestamp="activity.handleTime | dateFormat" :color="activity.color">
-                    {{ activity.handleUserName }}
-                    {{ activity.handleOpinion }}
+                <el-timeline-item v-for="(activity, index) in activities" :key="index" :timestamp="activity.handleTime | dateFormat" :color="activity.color">
+                    <span>{{ activity.handleUserName }}</span>
+                    <span>{{ activity.handleOpinion }}</span>
                 </el-timeline-item>
             </el-timeline>
         </div>

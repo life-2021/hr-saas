@@ -33,7 +33,8 @@
         <el-divider v-bind:id="[isHidden ? 'lineDefault' : 'lineShow']"></el-divider>
         <!-- 表格 -->
         <div class="table" v-show="!isHidden">
-            <el-table :data="tableData" :id='getIdFn(this.checkedYearsMonth)' ref="exportTableRef" border style="width: 84vw" height="550">
+            <el-table :data="tableData" :id='getIdFn(this.checkedYearsMonth)' ref="exportTableRef" border
+                style="width: 84vw" height="550">
                 <!-- 索引列-->
                 <el-table-column type="index" :index="indexMethod" fixed label="序号" width="70">
                 </el-table-column>
@@ -117,7 +118,7 @@ export default {
             let fix = document.querySelector('.el-table__fixed');
             let wb;
             if (fix) { //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                // console.log(document.querySelector(`#table${this.checkedYearsMonth}`))
+                console.log(document.querySelector(`#table${this.checkedYearsMonth}`))
                 wb = XLSX.utils.table_to_book(document.querySelector(`#table${this.checkedYearsMonth}`).removeChild(fix), xlsxParam);
                 document.querySelector(`#table${this.checkedYearsMonth}`).appendChild(fix);
             } else {
