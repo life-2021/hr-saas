@@ -19,7 +19,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog :visible="showDialog" :title="showText" @close="btnCancel">
+    <el-dialog :visible="showDialog" :title="formData.id ? '编辑权限' : '新增权限'" @close="btnCancel">
       <el-form ref="permForm" :model="formData" label-width="120px" :rules="rules">
         <el-form-item label="名称" prop="name">
           <el-input v-model="formData.name" style="width:90%" />
@@ -66,10 +66,10 @@ export default {
     }
   },
   computed: {
-    showText() {
-      console.log(this.formData);
-      return this.formData.id ? '编辑权限' : '新增权限'
-    }
+    // showText() {
+    //   console.log(this.formData);
+    //   return this.formData.id ? '编辑权限' : '新增权限'
+    // }
   },
   created() {
     this.getPermissionList()
@@ -120,7 +120,9 @@ export default {
     },
     // 编辑按钮
     async editPermission(id) {
-      this.formData = await getPermissionDetail(id)
+      let result = await getPermissionDetail(id)
+      this.formData =result.data.data
+      // console.log(this.formData);
       this.showDialog = true
     }
   }

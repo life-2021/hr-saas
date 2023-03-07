@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="showTitle" :visible="showDialog" @close="btnCancel">
+  <el-dialog :title="formData.id ? '编辑部门' : '新增部门'" :visible="showDialog" @close="btnCancel">
     <el-form ref="deptForm" :model="formData" :rules="rules" label-width="120px">
       <el-form-item prop="name" label="部门名称">
         <el-input v-model="formData.name" style="width:80%" placeholder="1-50个字符" />
@@ -44,12 +44,12 @@ export default {
   },
   data() {
     const checkNameRepeat = async(rule, value, callback) => {
-      const { depts } = await getDepartments()
-
+      let result = await getDepartments()
+      const {depts} = result.data.data
       let isRepeat = false
       if (this.formData.id) {
         // 有id就是编辑模式
-        isRepeat = depts.filter(item => item.id !== this.formData.id && item.pid === this.treeNode.pid).some(item => item.name === value)
+        isRepeat = depts.filter(item => item.id !== this.treeNode.id && item.pid === this.treeNode.pid).some(item => item.name === value)
       } else {
         // 没id就是新增模式
         isRepeat = depts.filter(item => item.pid === this.treeNode.id).some(item => item.name === value)
@@ -59,11 +59,12 @@ export default {
     }
     // 检查编码重复
     const checkCodeRepeat = async(rule, value, callback) => {
-      const { depts } = await getDepartments()
+      let result = await getDepartments()
+      const {depts} = result.data.data
       let isRepeat = false
       if (this.formData.id) {
         // 编辑模式 
-        isRepeat = depts.some(item => item.id !== this.formData.id && item.code === value && value)
+        isRepeat = depts.filter(item => item.id !== this.treeNode.id).some(item => item.code === value && value)
       } else {
         // 新增模式
         isRepeat = depts.some(item => item.code === value && value)
@@ -104,21 +105,24 @@ export default {
     
   },
   computed: {
-    showTitle() {
+    // showTitle() {
       // console.log(this.formData);
       // console.log(this.formData.id);
-      return this.formData.id ? '编辑部门' : '新增部门'
-    }
+      // return this.formData.id ? '编辑部门' : '新增部门'
+    // }
   },
   methods: {
     // 获取员工简单列表数据
     async  getEmployeeSimple() {
-      this.peoples = await getEmployeeSimple()
-      console.log(this.peoples);
+      let result = await getEmployeeSimple()
+      this.peoples = result.data.data
+      // console.log(this.peoples);
     },
     // 获取详情方法
     async  getDepartDetail(id) {
-      this.formData = await getDepartDetail(id)
+      let result = await getDepartDetail(id)
+      this.formData = result.data.data
+      // console.log(this.formData);
     },
     // 点击确定时触发
     btnOK() {
@@ -127,11 +131,12 @@ export default {
           if (this.formData.id) {
             // 编辑模式
             await updateDepartments(this.formData)
+            // console.log(this.formData);
           } else {
             // 新增模式
             await addDepartments({ ...this.formData, pid: this.treeNode.id }) 
           }
-          this.$emit('addDepts') // 告诉父组件 新增数据成功 重新拉取数据
+          this.$emit('addDepts') // 新增数据
           this.$emit('update:showDialog', false) // 触发事件
         }
       })
