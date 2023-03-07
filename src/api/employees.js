@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+//获取员工简单列表
 export function getEmployeeSimple() {
   return request({
     url: '/api/sys/user/simple'
@@ -46,6 +47,16 @@ export function getJobDetail(id) {
     url: `/api/employees/${id}/jobs`
   })
 }
+
+//保存的岗位
+export function updateJob(data) {
+  return request({
+    url: `/employees/${data.userId}/jobs`,
+    method: 'put',
+    data
+  })
+}
+
 
 
 //保存员工的基本信息

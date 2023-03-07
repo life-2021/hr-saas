@@ -160,7 +160,6 @@
 
 <script>
 import EmployeeEnum from '@/api/constant/employees'
-
 export default {
   data() {
     return {
@@ -196,6 +195,7 @@ export default {
         workingTimeForTheFirstTime: '' // 首次参加工作时间
       }
     }
-  }
+  },
+  
 }
 </script>

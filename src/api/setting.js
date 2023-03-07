@@ -16,6 +16,15 @@ export function getCompanyInfoAPI(companyId) {
     })
 }
 
+//获取角色列表
+export function getRoleList(params){
+    return request({
+        url:'/api/sys/role',
+        params
+    })
+}
+
+
 // 新增角色
 export function addRoleAPI(data) {
     return request({

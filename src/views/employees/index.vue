@@ -63,7 +63,10 @@
         />
       </el-row>
     </div>
+    <!-- 添加员工 -->
     <add-employee :show-dialog.sync="showDialog" />
+    <!-- 分配角色 -->
+    <!-- <assign-role :show-role-dialog.sync="showRoleDialog" :userId="userId"/> -->
   </div>
 </template>
 
@@ -71,7 +74,7 @@
 import { getEmployeeList, delEmployee } from "@/api/employees";
 import AddEmployee from "./components/add-employee.vue";
 import EmployeeEnum from "@/api/constant/employees";
-import assignRole from './components/assign-role.vue'
+import assignRole from './components/assign-role.vue';
 export default {
   data() {
     return {
@@ -81,15 +84,19 @@ export default {
         size: 10, //每页条数
       },
       total: 0, //数据总条数
-      showDialog: false,
+      showDialog: false,  //添加员工弹窗
+      showRoleDialog:false, //分配角色弹窗
+      userId:""
     };
   },
   methods: {
+    //获取员工列表
     async getEmployeeList() {
       const res = await getEmployeeList(this.page);
       this.employeesList = res.data.data.rows;
       this.total = res.data.data.total;
     },
+    //当前页面发生改变时触发
     changePage(newPage) {
       this.page.page = newPage;
       this.getEmployeeList();
@@ -98,6 +105,7 @@ export default {
       const obj = EmployeeEnum.hireType.find((item) => item.id === cellValue);
       return obj ? obj.value : "未知";
     },
+    //删除员工
     async delEmployee(id) {
       try {
         await this.$confirm("您确定删除该员工吗");
@@ -111,12 +119,14 @@ export default {
     lookDeatilFn(id) {
       this.$router.push(`/detail?id=${id}`);
     },
+    //跳转详情页
     toImport() {
       this.$router.push(`/import`);
     },
-    async editRole(id) {
-      
-    },
+    editRole(id){
+      this.userId = id
+      this.showRoleDialog = true
+    }
   },
   mounted() {
     //获取员工列表
@@ -124,7 +134,7 @@ export default {
   },
   components: {
     AddEmployee,
-    assignRole
+    assignRole,
   },
 };
 </script>
