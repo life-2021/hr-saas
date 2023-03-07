@@ -16,7 +16,7 @@ export function getPermissionDetail(id) {
 //删除权限
 export function delPermission(id) {
     return request({
-        url: `/api/sys/permission/${id}`,
+        url: `/sys/permission/${id}`,
         method: 'delete'
     })
 }
@@ -31,7 +31,7 @@ export function addPermission(data) {
 //获取权限
 export function getPermissionListAPI(params) {
     return request({
-        url: '/sys/permission',
+        url: '/api/sys/permission',
         params
     })
 }

@@ -22,7 +22,7 @@
                 <span class="value">{{ this.yearsMonthData.total }}</span>
             </div>
             <div>
-                <el-tooltip effect="dark" :disabled="isExport" content="请先展开查看后再导出！" placement="right">
+                <el-tooltip effect="dark" :disabled="isExport" content="数据未加载！" placement="right">
                     <div style="margin-top: -15%;">
                         <el-button type="primary" icon="el-icon-printer" @click="exportExcel"
                             :disabled="!isExport">导出</el-button>
@@ -33,7 +33,7 @@
         <el-divider v-bind:id="[isHidden ? 'lineDefault' : 'lineShow']"></el-divider>
         <!-- 表格 -->
         <div class="table" v-show="!isHidden">
-            <el-table :data="tableData" id="socialTable" ref="exportTableRef" border style="width: 84vw" height="550">
+            <el-table :data="tableData" :id='getIdFn(this.checkedYearsMonth)' ref="exportTableRef" border style="width: 84vw" height="550">
                 <!-- 索引列-->
                 <el-table-column type="index" :index="indexMethod" fixed label="序号" width="70">
                 </el-table-column>
@@ -82,7 +82,7 @@ export default {
     data() {
         return {
             isHidden: true,//是否隐藏表单
-            isExport: false,//是否能到导出
+            isExport: false,//是否能导出
             checkedYearsMonth: this.yearsMonthData.yearsMonth,//月份
             tableData: []
         }
@@ -107,16 +107,21 @@ export default {
             }
             return moment(date).format("YYYY-MM-DD")
         },
+        // 
+        getIdFn(date) {
+            return 'table' + date;
+        },
         // 导出表格功能
         exportExcel() {
             var xlsxParam = { raw: true };
             let fix = document.querySelector('.el-table__fixed');
             let wb;
             if (fix) { //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                wb = XLSX.utils.table_to_book(document.querySelector('#socialTable').removeChild(fix), xlsxParam);
-                document.querySelector('#socialTable').appendChild(fix);
+                // console.log(document.querySelector(`#table${this.checkedYearsMonth}`))
+                wb = XLSX.utils.table_to_book(document.querySelector(`#table${this.checkedYearsMonth}`).removeChild(fix), xlsxParam);
+                document.querySelector(`#table${this.checkedYearsMonth}`).appendChild(fix);
             } else {
-                wb = XLSX.utils.table_to_book(document.querySelector('#socialTable'));
+                wb = XLSX.utils.table_to_book(document.querySelector(`#table${this.checkedYearsMonth}`));
             }
             let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
             try {
@@ -124,30 +129,23 @@ export default {
             } catch (e) {
                 if (typeof console !== 'undefined') console.log(e, wbout)
             }
-            this.$message({ message: '表格导出成功！（有延迟请稍等)', type: 'success' })
+            this.$message({ message: `${this.checkedYearsMonth}报表导出成功！即将开始下载！`, type: 'success' })
             return wbout
         },
         // 获取指定年份的社保表格信息 
         async getSocialHistoricalTableFn(YearsMonth) {
             let res = await getSocialHistoricalTableAPI(YearsMonth)
             this.tableData = res.data.data
-            this.$message({ message: '数据获取成功', type: 'success' })
+            this.$message({ message: `${YearsMonth}报表数据获取成功`, type: 'success' })
             this.isExport = !this.isExport;
         },
 
     },
     watch: {
-        isHidden: {
-            handler() {
-                if (!this.isHidden) {
-                    this.getSocialHistoricalTableFn(this.checkedYearsMonth)
-                } else if (this.isHidden) {
-                    this.isExport = !this.isExport;
-                }
-            }
-
-        }
     },
+    mounted() {
+        this.getSocialHistoricalTableFn(this.checkedYearsMonth)
+    }
 }
 </script>
 
