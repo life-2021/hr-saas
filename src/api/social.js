@@ -75,10 +75,20 @@ export function getUserSocialAPI(id) {
 
 // 获取指定城市的社保缴费详情
 export function getCitySocialAPI(id) {
-  console.log(id);
+  // console.log(id);
   return request({
     url: `api/social_securitys/payment_item/${id}`,
     method: "get",
   });
 }
+
+// 提交用户社保信息
+export function submitUserSocialAPI(data) {
+  console.log(data);
+  return request({
+    url: `api/social_securitys/${data.userId}`,
+    method: "put",
+  });
+}
+
 

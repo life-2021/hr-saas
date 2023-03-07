@@ -1,23 +1,23 @@
 import request from '@/utils/request'
 
 export function getEmployeeSimple() {
-    return request({
-      url: '/api/sys/user/simple'
-    })
-  }
+  return request({
+    url: '/api/sys/user/simple'
+  })
+}
 
 //获取员工列表
 export function getEmployeeList(params) {
-    return request({
-        url:'/api/sys/user',
-        params
-    })
+  return request({
+    url: '/api/sys/user',
+    params
+  })
 }
 
 export function addEmployee(data) {
   return request({
-    url:'/api/sys/user',
-    method:'post',
+    url: '/api/sys/user',
+    method: 'post',
     data
   })
 }
@@ -43,7 +43,7 @@ export function assignRoles(data) {
 //员工岗位
 export function getJobDetail(id) {
   return request({
-    url: `/employees/${id}/jobs`
+    url: `/api/employees/${id}/jobs`
   })
 }
 
