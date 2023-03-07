@@ -79,7 +79,7 @@ const routes = [
         path: "socialDetail",
         name: "SocialDetail",
         component: () => import("@/views/social/childPage/socialDetail"),
-        meta: { title: "社保-月度报表" },
+        meta: { title: "社保-个人详情" },
       },
       {
         path: "attendances",
@@ -92,6 +92,18 @@ const routes = [
         name: "Approvals",
         component: () => import("@/views/approvals/index"),
         meta: { title: "审批" },
+      },
+      {
+        path: "process",
+        name: "Process",
+        component: () => import("@/views/approvals/modules/processSet"),
+        meta: { title: "审批流程" },
+      },
+      {
+        path: "processDetail",
+        name: "ProcessDetail",
+        component: () => import("@/views/approvals/modules/processDetail"),
+        meta: { title: "审批详情" },
       },
       {
         path: "permission",

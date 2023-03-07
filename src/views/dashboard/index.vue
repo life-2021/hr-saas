@@ -65,8 +65,8 @@
           <div class="moduleContent">
             <el-button plain @click="applyFormVisible = true">加班离职</el-button>
             <el-button plain @click="leaveFormVisible = true">请假调休</el-button>
-            <el-button plain>审批列表</el-button>
-            <el-button plain>我的信息</el-button>
+            <el-button plain @click="approvalsFn">审批列表</el-button>
+            <el-button plain @click="userInfoFn">我的信息</el-button>
 
             <!-- 加班离职表单 -->
             <applyForm :applyFormVisible="applyFormVisible" @applyFormCancel="applyFormCancel"> </applyForm>
