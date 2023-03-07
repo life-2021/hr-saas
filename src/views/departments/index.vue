@@ -50,6 +50,7 @@ export default {
     editDepts(node) {
       this.showDialog = true
       this.node=node
+      // console.log(this.node);
       this.$refs.addDept.getDepartDetail(node.id) 
     }
 
