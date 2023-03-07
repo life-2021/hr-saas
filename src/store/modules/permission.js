@@ -1,4 +1,3 @@
-
 import { routes } from '@/router'
 const state = {
     routes: routes
