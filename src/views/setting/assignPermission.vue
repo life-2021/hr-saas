@@ -1,7 +1,17 @@
 <template>
   <div>
-    <div>分配权限功能</div>
-    <el-row slot="footer" type="flex" justify="center">
+    <!-- <el-tree :data="PermissionList" :props="{label:'name'}" /> -->
+    <el-tree 
+    ref="theTree"
+    :data="PermissionList" 
+    :props="{ label: 'name'}"
+    show-checkbox
+    default-expand-all
+    check-strictly
+    node-key="id"
+    />
+
+    <el-row class="footer" type="flex" justify="center">
             <el-col :span="6">
               <el-button size="small" @click="cancelButton">取消</el-button>
               <el-button type="primary" size="small" @click="setRolesBtn">确定</el-button>
@@ -12,12 +22,16 @@
 
 <script>
 export default {
-     name:'AssingPermission',
+     name:'AssignPermission',
      props:{
         PermissionList:{
             type:Array,
-            default:_=>[]
+            default: _ => []
         },
+         permIds:{
+            ype:Array,
+            default:() => []
+         },
         roleId:{
             type:[Number,String],
             required:true
@@ -26,16 +40,23 @@ export default {
      data(){
         return{}
      },
+     watch:{
+       permIds(){
+            this.$refs.theTree.setCheckedKeys(this.permIds)
+         }
+     },
      created(){
         console.log(this.roleId)
      },
+     
     methods:{
         //取消按钮
         cancelButton(){
             this.$emit('input',false)
         },
         //设置权限按钮
-        setrolesBtn(){
+        setRolesBtn(){
+            this.$emit('addperEV',this.$refs.theTree.getCheckedKeys())
             this.$emit('input',false)
         }
     }
