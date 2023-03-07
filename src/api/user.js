@@ -1,4 +1,4 @@
-import request from "@/utils/request"
+import request from "@/utils/request";
 
 // 登录接口
 export function login(data) {
@@ -39,15 +39,22 @@ export function getUserProfileAPI_3(data) {
 // export function getUserPhotoAPI(id) {
 //   return request({
 //     url: `/sys/user/${id}`,
+//     method: 'GET',
 //   });
 // }
-
 
 //获取用户的基本信息
 export function getUserDetailById(id) {
   return request({
-    url: `/api/sys/user/${id}`
-  })
+    url: `/api/sys/user/${id}`,
+    method: "GET",
+  });
 }
 
-
+// 用户信息修改提交
+export function updataUserInfoAPI(data) {
+  return request({
+    url: `/api/sys/user/${data.userId}`,
+    method: "put",
+  });
+}

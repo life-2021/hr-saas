@@ -42,7 +42,7 @@
                 </el-table>
             </div>
             <div class="toolbar">
-                <el-button type="primary" icon="el-icon-printer" @click="exportExcel">导出</el-button>
+                <el-button type="primary" icon="el-icon-printer" @click="exportExcel" :disabled="!isExport">导出</el-button>
                 <el-button type="danger" icon="el-icon-upload2" @click="submitFn">归档</el-button>
                 <el-button icon="el-icon-d-arrow-left" @click="backFn">返回</el-button>
             </div>
@@ -60,6 +60,7 @@ export default {
 
     data() {
         return {
+            isExport: false,//是否能导出
             Month: '',//当前月份
             tableData: []//表格数据
         }
@@ -109,7 +110,8 @@ export default {
         async getMonthTableFn() {
             let res = await getMonthTableAPI(this.Month)
             this.tableData = res.data.data
-            // this.$message({ message: '数据获取成功', type: 'success' })
+            this.$message({ message: '数据获取成功', type: 'success' })
+            this.isExport = !this.isExport;
         },
         // 归档
         async submitFn() {
