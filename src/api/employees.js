@@ -43,7 +43,7 @@ export function assignRoles(data) {
 //员工岗位
 export function getJobDetail(id) {
   return request({
-    url: `/employees/${id}/jobs`
+    url: `/api/employees/${id}/jobs`
   })
 }
 
@@ -58,13 +58,13 @@ export function saveUserDetailById(data) {
 }
 
 /** **
- *
- * 导入员工数据  参数data是一个数组类型
- * ****/
+*
+* 导入员工数据 参数data是一个数组类型
+* ****/
 export function importEmployee(data) {
-    return request({
-      url: '/api/sys/user/batch',
-      method: 'post',
-      data
-    })
+   return request({
+    url: '/api/sys/user/batch',
+    method: 'post',
+    data
+   })
   }

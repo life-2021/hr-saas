@@ -8,7 +8,7 @@
         <div v-if="!isCollapse" class="ico el-icon-s-fold" @click="changeIsCollapse"></div>
         <div v-else class="ico el-icon-s-unfold" @click="changeIsCollapse"></div>
         <div class="itile">南昌中兴软件技术公司</div>
-        <div class="full"><i class="el-icon-full-screen"></i></div>
+        <!-- <div class="full"><i class="el-icon-full-screen"></i></div> -->
         <div class="user">
           <el-dropdown>
             <div>

@@ -7,8 +7,8 @@
         <span>本月：社保在缴 公积金在缴 增员 减员 入职 离职</span>
       </div>
       <div class="linkBtn">
-        <el-button type="danger" size="mini">历史归档</el-button>
-        <el-button type="primary" size="mini">当月报表</el-button>
+        <el-button type="danger" size="mini" @click="linkFn">历史归档</el-button>
+        <el-button type="primary" size="mini" @click="linkFn2">{{ this.dataMonth }}报表</el-button>
       </div>
     </div>
     <!-- end：头部工具栏 -->
@@ -19,8 +19,7 @@
         <!-- 部门筛选 -->
         <el-form-item label="部门" style="font-weight: 800;">
           <el-checkbox-group v-model="form.departmentChecks">
-            <el-checkbox v-for="item in departmentsList" :key="item.id" :label="item.id" name="departments"
-              @change="testFn">
+            <el-checkbox v-for="item in departmentsList" :key="item.id" :label="item.id" name="departments">
               {{ item.name }}
             </el-checkbox>
 
@@ -29,14 +28,15 @@
         <!-- 社保城市筛选 -->
         <el-form-item label="社保城市" style="font-weight: 800;">
           <el-checkbox-group v-model="form.socialSecurityChecks">
-            <el-checkbox v-for="item in CitysList" :key="item.id" :label="item.id" name="socialCitys">{{ item.name }}</el-checkbox>
+            <el-checkbox v-for="item in CitysList" :key="item.id" :label="item.id" name="socialCitys">{{ item.name
+            }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <!-- 公积金城市筛选 -->
         <el-form-item label="公积金城市" style="font-weight: 800;">
           <el-checkbox-group v-model="form.providentFundChecks">
-            <el-checkbox v-for="item in CitysList" :key="item.id" :label="item.id"
-              name="accumulationFundCitys">{{ item.name }}</el-checkbox>
+            <el-checkbox v-for="item in CitysList" :key="item.id" :label="item.id" name="accumulationFundCitys">{{
+              item.name }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
@@ -83,7 +83,11 @@
           </el-table-column>
           <!-- 操作 -->
           <el-table-column label="操作">
-            <a href="#">查看详情</a>
+            <template slot-scope="scope">
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="socialDetailFn(scope.row.id)">编辑</el-button>
+            </template>
+
+            <!-- <a href="javascript:;" @click="socialDetailFn()">查看详情</a> -->
           </el-table-column>
         </el-table>
       </div>
@@ -99,7 +103,7 @@
 </template>
 
 <script>
-import { getDepartmentListAPI, getCitysListAPI, getSocialListAPI } from '@/api/social'
+import { getDepartmentListAPI, getCitysListAPI, getYearMonthAPI, getSocialListAPI } from '@/api/social'
 export default {
   data() {
     return {
@@ -108,7 +112,7 @@ export default {
       SocialList: [],//社保表单数据
       SocialListTotal: 0,//社保表单数据总数
       currentPage: 1,//当前页数
-
+      dataMonth: '',//当前月份数据
       form: {
         departmentChecks: [],//筛选的部门列表
         socialSecurityChecks: [],// 筛选的社保城市列表
@@ -143,27 +147,57 @@ export default {
 
     // 获取部门列表
     async getDepartmentListFn() {
-      var res = await getDepartmentListAPI();
+      let res = await getDepartmentListAPI();
       this.departmentsList = res.data.data.depts;
     },
     // 获取城市列表
     async getsocialCitysListFn() {
-      var res = await getCitysListAPI();
+      let res = await getCitysListAPI();
       this.CitysList = res.data.data;
+    },
+    // 获取当前月份
+    async getYearMonthFn() {
+      let res = await getYearMonthAPI();
+      this.dataMonth = res.data.data.dataMonth
     },
     // 获取社保表格列表
     async getSocialListFn(data) {
       data ? data : data = { page: 1, pageSize: 10, total: 0 };
-      var res = await getSocialListAPI(data);
+      let res = await getSocialListAPI(data);
       this.SocialList = res.data.data.rows;
       this.SocialListTotal = res.data.data.total;
-    }
+    },
+    // 跳转个人详情
+    socialDetailFn(id) {
+      this.$router.push(
+        {
+          path: '/socialDetail',
+          query: {
+            userId: id,
+          },
+        });
+    },
+    // 跳转
+    linkFn() {
+      this.$router.push('/historicalArchiving');
+    },
+    linkFn2() {
+      this.$router.push(
+        {
+          path: '/monthTable',
+          query: {
+            Month: this.dataMonth,
+          },
+        });
+    },
   },
   mounted() {
     // 获取部门列表
     this.getDepartmentListFn()
     // 获取城市列表
     this.getsocialCitysListFn()
+    //获取当前月份
+    this.getYearMonthFn()
     //获取社保信息列表
     this.getSocialListFn()
   },

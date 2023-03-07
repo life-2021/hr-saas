@@ -61,7 +61,6 @@ export default {
         this.$emit("editDepts", this.treeNode);
       } else {
         //  删除操作
-        //  删除操作
         this.$confirm("确定要删除该部门吗")
           .then(() => {
             // 如果点击了确定就会进入then

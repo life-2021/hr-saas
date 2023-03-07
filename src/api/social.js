@@ -24,6 +24,13 @@ export function getSocialListAPI(data) {
     data,
   });
 }
+// 获取当前月份
+export function getYearMonthAPI() {
+  return request({
+    url: "api/social_securitys/settings",
+    method: "get",
+  });
+}
 
 // 获取公司社保历史信息
 export function getSocialHistoricalAPI(data) {
@@ -35,8 +42,43 @@ export function getSocialHistoricalAPI(data) {
 
 // 获取公司社保历史表单
 export function getSocialHistoricalTableAPI(data) {
+  // console.log(data);
   return request({
-    url: `api/social_securitys/historys/202001?month=202001&year=2020&opType=2`,
+    url: `api/social_securitys/historys/${data}?month=${data}&year=${data}&opType=2`,
     method: "get",
   });
 }
+
+// 获取当前月份表单
+export function getMonthTableAPI(data) {
+  return request({
+    url: `api/social_securitys/historys/${data}?month=${data}&opType=1`,
+    method: "get",
+  });
+}
+
+// 归档
+export function submitMonthTableAPI() {
+  return request({
+    url: `api/social_securitys/historys/undefined/archive`,
+    method: "post",
+  });
+}
+
+// 获取用户的社保信息
+export function getUserSocialAPI(id) {
+  return request({
+    url: `api/social_securitys/${id}`,
+    method: "get",
+  });
+}
+
+// 获取指定城市的社保缴费详情
+export function getCitySocialAPI(id) {
+  console.log(id);
+  return request({
+    url: `api/social_securitys/payment_item/${id}`,
+    method: "get",
+  });
+}
+

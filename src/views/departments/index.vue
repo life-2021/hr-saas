@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading"
+  <div 
     class="dashboard-container"
     element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
@@ -35,26 +35,20 @@
 import TreeTools from "../departments/components/TreeTools.vue";
 import AddDept from "../departments/components/AddDept.vue";
 import { getDepartments } from "../../api/departments";
-import { tranListToTreeData } from "../../utils/departments";
+import { tranListToTreeData } from "../../utils/index";
 export default {
   components: { TreeTools, AddDept },
   data() {
     return {
-      departs: [ {
-          name: "总裁办",
-          manager: "曹操",
-          children: [{ name: "董事会", manager: "曹丕" }],
-        },
-        { name: "行政部", manager: "刘备" },
-        { name: "人事部", manager: "孙权" },], // 存储组织架构的部门数据
-      company: { name: "江苏传智播客教育科技股份有限公司", manager: "负责人", id: "" },
+      departs: [], // 存储组织架构的部门数据
+      company: {},
       defaultProps: {
         children: "children",
         label: "name",
       }, // 树形控件的属性
       showDialog: false, //控制Dialog的显示与隐藏
       node:null, // 记录当前点击的部门
-      loading:false
+      // loading:false
     };
   },
   created() {
@@ -68,12 +62,12 @@ export default {
       console.log(scope);
     },
     async getDepartments() {
-      this.loading = true;
+      // this.loading = true;
       const result = await getDepartments();
-      this.company = { name: result.companyName, manager: "负责人" };
-      this.departs = tranListToTreeData(result.depts, "");
-      console.log(result);
-      this.loading = false;
+      this.company = { name:result.data.data.companyName, manager: "负责人" };
+      this.departs = tranListToTreeData(result.data.data.depts, "");
+      console.log(result.data.data);
+      // this.loading = false;
     },
     // 添加部门
     addDepts(node) {

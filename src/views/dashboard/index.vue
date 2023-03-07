@@ -2,7 +2,9 @@
   <div class="container">
     <!-- 头部（登陆者信息） -->
     <div class="Header">
-      <img class="userImg" src="@/assets/common/head.jpg" alt="" />
+      <div class="headPhoto">
+        <img class="userImg" :src="userInfo.staffPhoto" alt="" />
+      </div>
       <div class="hello">
         <p class="userName">早安，{{ userInfo.username }} ，祝你开心每一天！</p>
         <p>{{ userInfo.username }} | {{ userInfo.company }} - {{ userInfo.departmentName }}</p>
@@ -63,9 +65,9 @@
           <div class="moduleContent">
             <el-button plain @click="applyFormVisible = true">加班离职</el-button>
             <el-button plain @click="leaveFormVisible = true">请假调休</el-button>
-            <el-button plain >审批列表</el-button>
-            <el-button plain >我的信息</el-button>
-            
+            <el-button plain>审批列表</el-button>
+            <el-button plain>我的信息</el-button>
+
             <!-- 加班离职表单 -->
             <applyForm :applyFormVisible="applyFormVisible" @applyFormCancel="applyFormCancel"> </applyForm>
             <!-- 请假调休表单 -->
@@ -110,7 +112,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 import applyForm from "./modules/applyForm.vue";
 import leaveForm from "./modules/leaveForm.vue";
 export default {
@@ -121,10 +123,7 @@ export default {
     };
   },
   methods: {
-    // 获取用户基本数据
-    ...mapActions("user", {
-      getUserProfileFn: "getUserProfile",
-    }),
+
     // 关闭申请表单
     applyFormCancel() {
       this.applyFormVisible = false;
@@ -149,11 +148,7 @@ export default {
       userInfo: (state) => state.userInfo,
     }),
   },
-  mounted() {
-    // 获取用户信息
-    this.getUserProfileFn();
 
-  },
   components: {
     applyForm, //加班离职表单
     leaveForm, //请假调休表单
@@ -178,9 +173,19 @@ export default {
     display: inline-block;
   }
 
-  .userImg {
-    margin: 20px 0 0 50px;
+  .headPhoto {
+    // border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 30px 20px 20px 40px;
+    .userImg {
+      width: 100%;
+      height: 100%;
+    }
   }
+
 
   .hello {
     position: absolute;

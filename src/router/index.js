@@ -46,11 +46,12 @@ const routes = [
         meta: { title: "员工" },
       },
       {
-        path:"detail",    //员工详情
+        path:'detail',    
         component: () => import("@/views/employees/detail"),
+        meta: { title: "员工详情" },
       },
       {
-        path:"import",    //员工详情
+        path:"import", 
         component: () => import("@/views/import"),
       },
       {
@@ -74,9 +75,20 @@ const routes = [
       {
         path: "historicalArchiving",
         name: "HistoricalArchiving",
-        component: () =>
-          import("@/views/social/components/historicalArchiving"),
+        component: () => import("@/views/social/childPage/historicalArchiving"),
         meta: { title: "社保-历史档案" },
+      },
+      {
+        path: "monthTable",
+        name: "MonthTable",
+        component: () => import("@/views/social/childPage/monthTable"),
+        meta: { title: "社保-月度报表" },
+      },
+      {
+        path: "socialDetail",
+        name: "SocialDetail",
+        component: () => import("@/views/social/childPage/socialDetail"),
+        meta: { title: "社保-月度报表" },
       },
       {
         path: "attendances",
@@ -95,7 +107,7 @@ const routes = [
         name: "Permission",
         component: () => import("@/views/permission/index"),
         meta: { title: "权限管理" },
-      }
+      },
     ],
   },
 ];

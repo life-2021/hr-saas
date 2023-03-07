@@ -304,13 +304,13 @@ export default {
         nationalArea: '', // 国家
         passportNo: '', // 护照号
         idNumber: '', // 身份证号
-        idCardPhotoPositive: '', // 身份证照正
-        idCardPhotoBack: '', // 身份证照正
+        // idCardPhotoPositive: '', // 身份证照正
+        // idCardPhotoBack: '', // 身份证照正
         nativePlace: '', // 籍贯
         nation: '', // 民族
         englishName: '', // 英文名字
         maritalStatus: '', // 婚姻状况
-        staffPhoto: '', // 员工照片
+        // staffPhoto: '', // 员工照片
         birthday: '', // 生日
         zodiac: '', // 属相
         age: '', // 年龄
