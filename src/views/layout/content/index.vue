@@ -9,12 +9,15 @@
         <div v-else class="ico el-icon-s-unfold" @click="changeIsCollapse"></div>
         <div class="itile">南昌中兴软件技术公司</div>
         <div class="user">
-          <div class="fullBox">
-            <div class="full" v-if="!isFull" @click="fullScreen"><i class="el-icon-zoom-in" style="font-size: 30px;"></i></div>
-            <div class="full" v-else @click="exitScreen"><i class="el-icon-zoom-out" style="font-size: 30px;"></i></div>
-          </div>
           <el-dropdown>
             <div>
+              <div class="fullBox">
+                <div class="full" v-if="!isFull" @click="fullScreen"><i class="el-icon-zoom-in"
+                    style="font-size: 30px;"></i>
+                </div>
+                <div class="full" v-else @click="exitScreen"><i class="el-icon-zoom-out" style="font-size: 30px;"></i>
+                </div>
+              </div>
               <div class="userPhoto">
                 <img :src="userInfo.staffPhoto" alt="">
               </div>
@@ -125,15 +128,10 @@ export default {
     line-height: 50px;
 
     .fullBox {
+      position: absolute;
+      top: 60%;
+      transform: translate(-350%, -50%);
       display: inline-block;
-
-      .full {
-        display: inline-block;
-        position: absolute;
-        top: 60%;
-        right: 6.5vw;
-        transform: translateY(-50%);
-      }
     }
 
     .userPhoto {

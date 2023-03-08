@@ -69,7 +69,7 @@
             <el-button plain @click="userInfoFn">我的信息</el-button>
 
             <!-- 加班离职表单 -->
-            <applyForm :applyFormVisible="applyFormVisible" @applyFormCancel="applyFormCancel"> </applyForm>
+            <applyForm :applyFormVisible="applyFormVisible" @applyFormCancel="applyFormCancel"></applyForm>
             <!-- 请假调休表单 -->
             <leaveForm :leaveFormVisible="leaveFormVisible" @leaveFormCancel="leaveFormCancel"></leaveForm>
           </div>

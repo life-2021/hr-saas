@@ -115,14 +115,16 @@ export default {
         // 导出表格功能
         exportExcel() {
             var xlsxParam = { raw: true };
-            let fix = document.querySelector('.el-table__fixed');
+            let ymtable = document.getElementById(`table${this.checkedYearsMonth}`);
+            let fix = ymtable.getElementsByClassName('el-table__fixed')[0];
             let wb;
-            if (fix) { //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                console.log(document.querySelector(`#table${this.checkedYearsMonth}`))
-                wb = XLSX.utils.table_to_book(document.querySelector(`#table${this.checkedYearsMonth}`).removeChild(fix), xlsxParam);
-                document.querySelector(`#table${this.checkedYearsMonth}`).appendChild(fix);
+            //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
+            if (ymtable.hasChildNodes(fix)) { 
+                ymtable.removeChild(fix);
+                wb = XLSX.utils.table_to_book(ymtable, xlsxParam);
+                ymtable.appendChild(fix);
             } else {
-                wb = XLSX.utils.table_to_book(document.querySelector(`#table${this.checkedYearsMonth}`));
+                wb = XLSX.utils.table_to_book(ymtable);
             }
             let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
             try {
