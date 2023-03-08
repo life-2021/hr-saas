@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { getAttendancesListAPI } from '@/api/attendances'
+import { getAttendancesList } from '@/api/attendances'
 export default {
     data() {
         return {
@@ -108,7 +108,7 @@ export default {
         // 获取考勤表格数据
         async getAttendancesListFn(data) {
             data ? data : data = { page: 1, pagesize: 10, total: 0 };
-            let res = await getAttendancesListAPI(data)
+            let res = await getAttendancesList(data)
             // console.log(res.data.data.data.rows)
             this.monthOfReport = res.data.data.monthOfReport;
             this.TableTotal = res.data.data.data.total;

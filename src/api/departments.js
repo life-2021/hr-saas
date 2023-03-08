@@ -34,9 +34,10 @@ export function getDepartDetail(id) {
 }
 
 // 编辑部门信息
-export function updateDepartments(id) {
+export function updateDepartments(data) {
     return request({
-        url: `/api/company/department/${id}`,
-        method: 'put'
+        url: `/api/company/department/${data.id}`,
+        method: 'put',
+        data
     })
 }

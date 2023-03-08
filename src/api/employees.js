@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+//获取员工简单列表
 export function getEmployeeSimple() {
   return request({
     url: '/api/sys/user/simple'
@@ -47,6 +48,16 @@ export function getJobDetail(id) {
   })
 }
 
+//保存的岗位
+export function updateJob(data) {
+  return request({
+    url: `/employees/${data.userId}/jobs`,
+    method: 'put',
+    data
+  })
+}
+
+
 
 //保存员工的基本信息
 export function saveUserDetailById(data) {
@@ -56,3 +67,15 @@ export function saveUserDetailById(data) {
     data
   })
 }
+
+/** **
+*
+* 导入员工数据 参数data是一个数组类型
+* ****/
+export function importEmployee(data) {
+   return request({
+    url: '/api/sys/user/batch',
+    method: 'post',
+    data
+   })
+  }

@@ -1,12 +1,10 @@
 <template>
   <el-dialog title="分配角色" :visible="showRoleDialog">
-    <el-checkbox-group v-model="roleIds">
+    <!-- <el-checkbox-group v-model="roleIds"> -->
       <el-checkbox v-for="item in list" :key="item.id" :label="item.id">
-        {{
-          item.name
-        }}
+        {{ item.name }}
       </el-checkbox>
-    </el-checkbox-group>
+    <!-- </el-checkbox-group> -->
     <el-row slot="footer" type="flex" justify="center">
       <el-col :span="6">
         <el-button type="primary" size="small">确定</el-button>
@@ -17,32 +15,33 @@
 </template>
 
 <script>
- import { getRoleList } from '@/api/employees'
- export default {
+import { getRoleList } from '@/api/setting'
+export default {
   props: {
     showRoleDialog: {
       type: Boolean,
-      default: false
+      default: false,
     },
     userId: {
       type: String,
-      default: null
+      default: null,
+      required:true
     },
-    data(){
-        return{
-            list:[], //角色列表
-            roleIds: []
-        }
+    data() {
+      return {
+        list: [], //角色列表
+        roleIds: [], //存储用户角色的id
+      };
+    },
+    methods: {
+      async getRoleList(){
+        const {rows}  = await getRoleList({ page:1,pagesize:20})
+        console.log(rows)
+      }
     },
     created(){
-        this.getRoleList()
-    },
-    methods:{
-        async getRoleList(){
-            const { rows } = await getRoleList()
-            this.list = rows
-        }
+      this.getRoleList()
     }
-  }
-}
+  },
+};
 </script>
